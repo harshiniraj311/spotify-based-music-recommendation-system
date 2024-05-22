@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/651/651717.png">
+    <title>Music Recommendation</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" id="toggle-btn">&#9776;</button>
+        <div class="sidebar-content">
+            <h2>About the Project</h2>
+            <p style="text-align: left;">Embark on a musical journey with our innovative Music Recommendation System! Discover personalized song suggestions, delve into playlist analysis, and unlock the perfect soundtrack tailored just for you. Let our cutting-edge algorithms amplify your music experience, turning every beat into an unforgettable moment. Elevate your playlist game today!</p>
+            <h2>Features</h2>
+            <p style="text-align: left;">Enter the url of your playlist. <br><br><b>Get Recommendations:</b> helps you discover a curated selection of songs tailored to your unique taste in music. <br><br>
+            <b>Playlist Analysis: </b> helps you explore your playlist in detail, revealing every song accompanied by its respective artist.</p>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Music Recommendation System</h1>
+        <form action="/" method="post" id="musicForm">
+            <label for="playlist_id">Playlist ID:</label>
+            <input type="text" id="playlist_id" name="playlist_id" required value="{{ request.form['playlist_id'] if request.form else '' }}">
+
+            <label for="num_songs">Number of Songs:</label>
+            <input type="number" id="num_songs" name="num_songs" required min="1" value="{{ request.form['num_songs'] if request.form else '' }}">
+
+            <div class="buttons">
+                <input type="submit" name="get_recommendations" value="Get Recommendations">
+                <input type="submit" name="playlist_analysis" value="Playlist Analysis">
+                <input type="button" value="Reset" onclick="resetForm()">
+            </div>
+        </form>
+
+        {% if result %}
+        <h2 id="recommended-heading">Recommended Songs:</h2>
+        <div id="song-list">
+            {% for idx, row in result %}
+            <div class="song-box">{{ row['name'] }} by {{ row['artist'] }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if analysis %}
+        <h2 id="analysis-heading">Playlist Analysis:</h2>
+        <div id="analysis-list">
+            {% for track in analysis %}
+            <div class="song-box">{{ track['name'] }} by {{ track['artist'] }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="/static/scripts.js"></script>
+</body>
+</html>
